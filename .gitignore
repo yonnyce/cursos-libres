@@ -83,5 +83,6 @@ gradle-app.setting
 #jpa
 src/main/java/META-INF/
 .metadata
+.sonarlint/
 
 # End of https://www.gitignore.io/api/gradle,eclipse
