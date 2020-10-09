@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 public interface CommonService<E> {
 
 	Iterable<E> findAll();
-	
+
 	Page<E> findAll(Pageable pageable);
 
 	Optional<E> findById(Long id);
@@ -16,5 +16,7 @@ public interface CommonService<E> {
 	E save(E entity);
 
 	void deleteById(Long id);
+
+	E update(E entity);
 
 }

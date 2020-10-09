@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import co.edu.ucentral.app.servicio.common.base.entity.EntidadBase;
 import co.edu.ucentral.app.servicio.common.service.CommonService;
 
-public class CommonController<E, S extends CommonService<E>> {
+public class CommonController<E extends EntidadBase, S extends CommonService<E>> {
 
 	@Autowired
 	protected S service;
@@ -28,7 +30,7 @@ public class CommonController<E, S extends CommonService<E>> {
 	public ResponseEntity<?> listar() {
 		return ResponseEntity.ok(this.service.findAll());
 	}
-	
+
 	@GetMapping("/pagina")
 	public ResponseEntity<?> listar(Pageable pageable) {
 		return ResponseEntity.ok(this.service.findAll(pageable));
@@ -66,6 +68,18 @@ public class CommonController<E, S extends CommonService<E>> {
 		}
 
 		return ResponseEntity.ok(entity.get());
+	}
+
+	@PutMapping("/{id}")
+	public ResponseEntity<?> editar(@RequestBody E entity, @PathVariable Long id) {
+
+		if (!id.equals(entity.getId())) {
+			entity.setId(id);
+		}
+
+		entity = this.service.update(entity);
+
+		return ResponseEntity.ok(entity);
 	}
 
 	@DeleteMapping("/{id}")

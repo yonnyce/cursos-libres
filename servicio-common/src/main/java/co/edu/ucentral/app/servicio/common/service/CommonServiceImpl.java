@@ -2,13 +2,18 @@ package co.edu.ucentral.app.servicio.common.service;
 
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-public class CommonServiceImpl<E, R extends PagingAndSortingRepository<E, Long>> implements CommonService<E> {
+import co.edu.ucentral.app.servicio.common.base.entity.EntidadBase;
+
+public abstract class CommonServiceImpl<E extends EntidadBase, R extends PagingAndSortingRepository<E, Long>>
+		implements CommonService<E> {
 
 	@Autowired
 	protected R repository;
@@ -36,6 +41,21 @@ public class CommonServiceImpl<E, R extends PagingAndSortingRepository<E, Long>>
 	@Override
 	@Transactional(readOnly = false)
 	public E save(E entity) {
+		this.verifyUniqueEntity(entity);
+		return this.repository.save(entity);
+	}
+
+	@Override
+	@Transactional(readOnly = false)
+	public E update(E entity) {
+
+		if (entity.getId() == null || !this.repository.findById(entity.getId()).isPresent()) {
+			throw new EntityNotFoundException();
+		}
+
+		this.mapUpdateableFields(entity, this.repository.findById(entity.getId()).get());
+		this.verifyUniqueEntity(entity);
+
 		return this.repository.save(entity);
 	}
 
@@ -44,5 +64,9 @@ public class CommonServiceImpl<E, R extends PagingAndSortingRepository<E, Long>>
 	public void deleteById(Long id) {
 		this.repository.deleteById(id);
 	}
+
+	protected abstract void verifyUniqueEntity(E entity);
+
+	protected abstract E mapUpdateableFields(E newVersionEntity, E oldVersionEntity);
 
 }
