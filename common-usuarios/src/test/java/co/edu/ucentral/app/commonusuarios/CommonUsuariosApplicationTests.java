@@ -1,10 +1,10 @@
-package co.edu.ucentral.app.usuario;
+package co.edu.ucentral.app.commonusuarios;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ServicioUsuarioApplicationTests {
+class CommonUsuariosApplicationTests {
 
 	@Test
 	void contextLoads() {

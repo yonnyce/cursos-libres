@@ -9,10 +9,10 @@
 		<version>2.3.4.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>co.edu.ucentral.app.usuarios</groupId>
-	<artifactId>servicio-usuario</artifactId>
+	<groupId>co.edu.ucentral.app.servicio-security</groupId>
+	<artifactId>servicio-security</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>servicio-usuario</name>
+	<name>servicio-security</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
@@ -23,15 +23,19 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-oauth2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
 		</dependency>
 
 		<dependency>
@@ -68,15 +72,15 @@
 		</dependency>
 
 		<dependency>
-			<groupId>co.edu.ucentral.app.servicio.common</groupId>
-			<artifactId>servicio-common</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-
-		<dependency>
 			<groupId>co.edu.ucentral.app.common-usuarios</groupId>
 			<artifactId>common-usuarios</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-data-jpa</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 

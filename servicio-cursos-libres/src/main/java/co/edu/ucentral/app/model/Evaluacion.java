@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import co.edu.ucentral.app.servicio.common.base.entity.EntidadBase;
 
 @Entity
-@Table(name = "examen")
+@Table(name = "evaluacion")
 public class Evaluacion extends EntidadBase {
 
 	@OneToOne(fetch = FetchType.LAZY)
