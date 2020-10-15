@@ -1,16 +1,11 @@
 package co.edu.ucentral.app.servicio.common.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,41 +32,23 @@ public class CommonController<E extends EntidadBase, S extends CommonService<E>>
 	}
 
 	@PostMapping
-	public ResponseEntity<?> crear(@Valid @RequestBody E entity, BindingResult bindingResult) {
-
-		if (bindingResult.hasErrors()) {
-			return this.validar(bindingResult);
-		}
+	public ResponseEntity<?> crear(@Valid @RequestBody E entity) {
 
 		entity = this.service.save(entity);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(entity);
 	}
 
-	protected ResponseEntity<?> validar(BindingResult bindingResult) {
-		Map<String, Object> errores = new HashMap<>();
-
-		bindingResult.getFieldErrors().forEach(e -> {
-			errores.put(e.getField(), e.getField() + " " + e.getDefaultMessage());
-		});
-
-		return ResponseEntity.badRequest().body(errores);
-	}
-
 	@GetMapping("/{id}")
 	public ResponseEntity<?> listar(@PathVariable Long id) {
 
-		Optional<E> entity = this.service.findById(id);
+		E entity = this.service.findById(id);
 
-		if (!entity.isPresent()) {
-			return ResponseEntity.notFound().build();
-		}
-
-		return ResponseEntity.ok(entity.get());
+		return ResponseEntity.ok(entity);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<?> editar(@RequestBody E entity, @PathVariable Long id) {
+	public ResponseEntity<?> editar(@Valid @RequestBody E entity, @PathVariable Long id) {
 
 		if (!id.equals(entity.getId())) {
 			entity.setId(id);

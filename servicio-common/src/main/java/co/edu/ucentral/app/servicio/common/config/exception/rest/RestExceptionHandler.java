@@ -1,7 +1,9 @@
 package co.edu.ucentral.app.servicio.common.config.exception.rest;
 
 import java.nio.file.AccessDeniedException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -11,6 +13,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -30,6 +35,25 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		super();
 		log = LogManager.getLogger(RestExceptionHandler.class);
 		log.info("---------------RestExceptionHandler creado--------------");
+	}
+
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+		BindingResult bindingResult = ex.getBindingResult();
+
+		List<String> errores = new ArrayList<>();
+
+		for (FieldError fieldError : bindingResult.getFieldErrors()) {
+
+			errores.add(String.format("@%s:%s,", fieldError.getField(), fieldError.getDefaultMessage()));
+		}
+
+		ApiError apiError = new ApiError(status, "Ha ocurrido un error al tratar de validar la entidad", errores,
+				new Date());
+
+		return new ResponseEntity<>(apiError, headers, apiError.getStatus());
 	}
 
 	/**

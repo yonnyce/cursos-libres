@@ -13,8 +13,8 @@ public class EstudianteServiceImpl extends CommonServiceImpl<Estudiante, Estudia
 	}
 
 	@Override
-	protected Estudiante mapUpdateableFields(Estudiante newVersionEntity, Estudiante oldVersionEntity) {
-		return null;
+	protected void mapUpdateableFields(Estudiante newVersionEntity, Estudiante oldVersionEntity) {
+		
 	}
 
 }

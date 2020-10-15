@@ -9,6 +9,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import co.edu.ucentral.app.servicio.common.base.entity.EntidadBase;
 
 @Entity
@@ -19,8 +21,12 @@ public class Evaluacion extends EntidadBase {
 	@JoinColumn(name = "id_curso", nullable = false)
 	private Curso curso;
 
+	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	@OneToMany(mappedBy = "evaluacion")
 	private Set<Pregunta> preguntas;
+
+	@OneToMany(mappedBy = "curso")
+	private Set<EstudianteCurso> estudiantes;
 
 	public Curso getCurso() {
 		return curso;

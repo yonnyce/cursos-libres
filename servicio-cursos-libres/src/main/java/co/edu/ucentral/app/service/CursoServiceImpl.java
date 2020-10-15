@@ -1,9 +1,12 @@
 package co.edu.ucentral.app.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import co.edu.ucentral.app.model.Curso;
 import co.edu.ucentral.app.repository.CursoRepository;
+import co.edu.ucentral.app.servicio.common.config.exception.rest.UccCursosAppException;
 import co.edu.ucentral.app.servicio.common.service.CommonServiceImpl;
 
 @Service
@@ -11,14 +14,18 @@ public class CursoServiceImpl extends CommonServiceImpl<Curso, CursoRepository> 
 
 	@Override
 	protected void verifyUniqueEntity(Curso entity) {
-		// Verificar unico
+
+		Optional<Curso> cursoOpt = this.repository.findByNombre(entity.getNombre());
+
+		if (cursoOpt.isPresent() && !cursoOpt.get().getId().equals(entity.getId())) {
+			throw new UccCursosAppException("Ya existe un curso con el nombre ingresado");
+		}
 
 	}
 
 	@Override
-	protected Curso mapUpdateableFields(Curso newVersionEntity, Curso oldVersionEntity) {
-
-		return null;
+	protected void mapUpdateableFields(Curso newVersionEntity, Curso oldVersionEntity) {
+		oldVersionEntity.setNombre(newVersionEntity.getNombre());
 	}
 
 }

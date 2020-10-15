@@ -19,13 +19,12 @@ public class UsuarioServiceImpl extends CommonServiceImpl<Usuario, UsuarioReposi
 	@Override
 	protected void verifyUniqueEntity(Usuario entity) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	protected Usuario mapUpdateableFields(Usuario newVersionEntity, Usuario oldVersionEntity) {
-		// TODO Auto-generated method stub
-		return null;
+	protected void mapUpdateableFields(Usuario newVersionEntity, Usuario oldVersionEntity) {
+
 	}
 
 }

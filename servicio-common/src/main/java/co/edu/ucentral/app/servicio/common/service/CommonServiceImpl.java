@@ -34,8 +34,8 @@ public abstract class CommonServiceImpl<E extends EntidadBase, R extends PagingA
 
 	@Override
 	@Transactional(readOnly = true)
-	public Optional<E> findById(Long id) {
-		return this.repository.findById(id);
+	public E findById(Long id) {
+		return this.repository.findById(id).orElseThrow(EntityNotFoundException::new);
 	}
 
 	@Override
@@ -67,6 +67,6 @@ public abstract class CommonServiceImpl<E extends EntidadBase, R extends PagingA
 
 	protected abstract void verifyUniqueEntity(E entity);
 
-	protected abstract E mapUpdateableFields(E newVersionEntity, E oldVersionEntity);
+	protected abstract void mapUpdateableFields(E newVersionEntity, E oldVersionEntity);
 
 }
