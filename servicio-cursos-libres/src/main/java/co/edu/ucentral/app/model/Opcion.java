@@ -7,6 +7,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import co.edu.ucentral.app.servicio.common.base.entity.EntidadBase;
 
 @Entity
@@ -33,10 +35,6 @@ public class Opcion extends EntidadBase {
 
 	public Boolean getCorrecta() {
 		return correcta;
-	}
-
-	public void setCorrecta(Boolean correcta) {
-		this.correcta = correcta;
 	}
 
 	public Pregunta getPregunta() {
