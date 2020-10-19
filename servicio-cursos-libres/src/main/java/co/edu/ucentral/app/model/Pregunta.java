@@ -1,7 +1,7 @@
 package co.edu.ucentral.app.model;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.checkerframework.checker.nullness.Opt;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -53,6 +55,13 @@ public class Pregunta extends EntidadBase {
 
 	public void setEvaluacion(Evaluacion evaluacion) {
 		this.evaluacion = evaluacion;
+	}
+
+	public boolean respuestaCorrecta(Opcion opcion) {
+		Optional<Opcion> optOpcion = this.opciones.stream().filter(opt -> opt.getCorrecta())
+				.filter(opt -> opt.getId().equals(opcion.getId())).findAny();
+
+		return optOpcion.isPresent();
 	}
 
 }

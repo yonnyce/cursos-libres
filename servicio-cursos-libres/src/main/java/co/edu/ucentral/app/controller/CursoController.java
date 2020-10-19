@@ -41,14 +41,14 @@ public class CursoController extends CommonController<Curso, CursoService> {
 	@PostMapping("/{idCurso}/evaluacion/preguntas")
 	public ResponseEntity<?> agregarPreguntas(@Valid @RequestBody List<Pregunta> preguntas,
 			@PathVariable("idCurso") Long idCurso) {
+		this.evaluacionService.registrarPreguntasEvaluacion(idCurso, preguntas);
+		return ResponseEntity.ok().build();
+	}
+
+	@GetMapping("/{idCurso}/evaluacion")
+	public ResponseEntity<?> consultarEvaluacion(@PathVariable("idCurso") Long idCurso) {
 
 		Curso curso = this.service.findById(idCurso);
-
-		for (Pregunta pregunta : preguntas) {
-			pregunta.setEvaluacion(curso.getExamen());
-		}
-
-		curso.getExamen().getPreguntas().addAll(preguntas);
 
 		return ResponseEntity.ok(this.service.save(curso).getExamen());
 	}
@@ -63,7 +63,16 @@ public class CursoController extends CommonController<Curso, CursoService> {
 
 		curso.getEstudiantes().add(estudiante);
 
-		return ResponseEntity.ok(this.service.save(curso));
+		this.service.save(curso);
+
+		return ResponseEntity.ok().build();
+	}
+
+	@GetMapping("/{idCurso}/estudiantes/{idEstudiante}/respuestas")
+	public ResponseEntity<?> consultarRespuestasEstudiante(@PathVariable("idCurso") Long idCurso,
+			@PathVariable("idEstudiante") Long idEstudiante) {
+
+		return ResponseEntity.ok(this.evaluacionService.obtenerRespuestasEstudiante(idCurso, idEstudiante));
 	}
 
 	@GetMapping("/{idCurso}/estudiantes")
@@ -74,13 +83,29 @@ public class CursoController extends CommonController<Curso, CursoService> {
 		return ResponseEntity.ok(curso.getEstudiantes());
 	}
 
-	@PostMapping("/{idCurso}/estudiantes/{idEstudiante}/responder-examen")
+	@PostMapping("/{idCurso}/estudiantes/{idEstudiante}/evaluacion/respuestas")
 	public ResponseEntity<?> responderExamen(@RequestBody List<RespuestaEstudiante> respuestas,
 			@PathVariable("idCurso") Long idCurso, @PathVariable("idEstudiante") Long idEstudiante) {
 
-		Curso curso = this.service.findById(idCurso);
+		this.evaluacionService.registrarRespuestasEstudiante(idCurso, idEstudiante, respuestas);
 
-		return ResponseEntity.ok(curso.getEstudiantes());
+		return ResponseEntity.ok().build();
+	}
+
+	@GetMapping("/{idCurso}/estudiantes/{idEstudiante}/evaluacion/respuestas")
+	public ResponseEntity<?> obtenerRespuestas(@RequestBody List<RespuestaEstudiante> respuestas,
+			@PathVariable("idCurso") Long idCurso, @PathVariable("idEstudiante") Long idEstudiante) {
+
+		this.evaluacionService.registrarRespuestasEstudiante(idCurso, idEstudiante, respuestas);
+
+		return ResponseEntity.ok().build();
+	}
+
+	@GetMapping("/{idCurso}/estudiantes/{idEstudiante}/evaluacion/calificar")
+	public ResponseEntity<?> calificarExamenEstudiante(@PathVariable("idCurso") Long idCurso,
+			@PathVariable("idEstudiante") Long idEstudiante) {
+
+		return ResponseEntity.ok(this.evaluacionService.calificarExamenEstudiante(idCurso, idEstudiante));
 	}
 
 }

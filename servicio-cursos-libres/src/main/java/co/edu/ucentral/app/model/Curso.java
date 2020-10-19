@@ -13,6 +13,7 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import co.edu.ucentral.app.servicio.common.base.entity.EntidadBase;
@@ -32,12 +33,13 @@ public class Curso extends EntidadBase {
 
 	@Column(name = "id_periodo", nullable = false)
 	private Integer idPeriodo;
-
+	
+	@JsonIgnore
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "curso", cascade = CascadeType.ALL)
 	private Evaluacion examen;
 
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
-	@OneToMany(mappedBy = "curso")
+	@OneToMany(mappedBy = "curso",cascade = CascadeType.ALL)
 	private Set<EstudianteCurso> estudiantes;
 
 	public String getNombre() {

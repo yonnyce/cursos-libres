@@ -21,8 +21,9 @@ public class Opcion extends EntidadBase {
 	@Column(nullable = false)
 	private Boolean correcta;
 
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_pregunta")
+	@JoinColumn(name = "id_pregunta", nullable = false)
 	private Pregunta pregunta;
 
 	public String getEnunciado() {
@@ -31,6 +32,10 @@ public class Opcion extends EntidadBase {
 
 	public void setEnunciado(String enunciado) {
 		this.enunciado = enunciado;
+	}
+
+	public void setCorrecta(Boolean correcta) {
+		this.correcta = correcta;
 	}
 
 	public Boolean getCorrecta() {

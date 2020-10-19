@@ -1,19 +1,23 @@
 package co.edu.ucentral.app.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import co.edu.ucentral.app.servicio.common.base.entity.EntidadBase;
 
 @Entity
 @Table(name = "respuesta_estudiante")
-public class RespuestaEstudiante {
+public class RespuestaEstudiante extends EntidadBase {
 
-	@JoinColumn(name = "id_opcion")
+	@ManyToOne
+	@JoinColumn(name = "id_opcion", nullable = false)
 	private Opcion opcion;
 
-	@Column(name = "id_estudiante")
-	private Integer idEstudiante;
+	@ManyToOne
+	@JoinColumn(name = "id_estudiante_curso", nullable = false)
+	private EstudianteCurso estudianteCurso;
 
 	public Opcion getOpcion() {
 		return opcion;
@@ -23,12 +27,12 @@ public class RespuestaEstudiante {
 		this.opcion = opcion;
 	}
 
-	public Integer getIdEstudiante() {
-		return idEstudiante;
+	public EstudianteCurso getEstudianteCurso() {
+		return estudianteCurso;
 	}
 
-	public void setIdEstudiante(Integer idEstudiante) {
-		this.idEstudiante = idEstudiante;
+	public void setEstudianteCurso(EstudianteCurso estudianteCurso) {
+		this.estudianteCurso = estudianteCurso;
 	}
 
 }
