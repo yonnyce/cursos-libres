@@ -1,5 +1,6 @@
 package co.edu.ucentral.app.model;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -40,7 +41,7 @@ public class Curso extends EntidadBase {
 
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	@OneToMany(mappedBy = "curso",cascade = CascadeType.ALL)
-	private Set<EstudianteCurso> estudiantes;
+	private List<EstudianteCurso> estudiantes;
 
 	public String getNombre() {
 		return nombre;
@@ -74,12 +75,14 @@ public class Curso extends EntidadBase {
 		this.idPeriodo = idPeriodo;
 	}
 
-	public Set<EstudianteCurso> getEstudiantes() {
+	public List<EstudianteCurso> getEstudiantes() {
 		return estudiantes;
 	}
 
-	public void setEstudiantes(Set<EstudianteCurso> estudiantes) {
+	public void setEstudiantes(List<EstudianteCurso> estudiantes) {
 		this.estudiantes = estudiantes;
 	}
+
+	
 
 }

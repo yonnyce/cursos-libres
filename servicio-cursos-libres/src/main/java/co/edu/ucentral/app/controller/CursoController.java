@@ -18,7 +18,9 @@ import co.edu.ucentral.app.model.Evaluacion;
 import co.edu.ucentral.app.model.Pregunta;
 import co.edu.ucentral.app.model.RespuestaEstudiante;
 import co.edu.ucentral.app.service.CursoService;
+import co.edu.ucentral.app.service.EstudianteFeignService;
 import co.edu.ucentral.app.service.EvaluacionService;
+import co.edu.ucentral.app.servicio.common.config.exception.rest.UccCursosAppException;
 import co.edu.ucentral.app.servicio.common.controller.CommonController;
 
 @RestController
@@ -26,6 +28,9 @@ public class CursoController extends CommonController<Curso, CursoService> {
 
 	@Autowired
 	EvaluacionService evaluacionService;
+
+	@Autowired
+	EstudianteFeignService estudianteFeignService;
 
 	@PostMapping("/{idCurso}/evaluacion")
 	public ResponseEntity<?> crearExamen(@Valid @RequestBody Evaluacion evaluacion,
@@ -51,6 +56,30 @@ public class CursoController extends CommonController<Curso, CursoService> {
 		Curso curso = this.service.findById(idCurso);
 
 		return ResponseEntity.ok(this.service.save(curso).getExamen());
+	}
+
+	@GetMapping("/{idCurso}/evaluacion/resultados")
+	public ResponseEntity<?> consultarResultadosEvaluacion(@PathVariable("idCurso") Long idCurso) {
+
+		return ResponseEntity.ok(this.evaluacionService.obtenerTodosResultadosEstudiantes(idCurso));
+	}
+
+	@GetMapping("/{idCurso}/evaluacion/estadisticas")
+	public ResponseEntity<?> consultarEstadisticasEvaluacion(@PathVariable("idCurso") Long idCurso) {
+
+		return ResponseEntity.ok(this.evaluacionService.obtenerEstadisticasCurso(idCurso));
+	}
+
+	@GetMapping("/{idCurso}/evaluacion/estudiantes-aprobados")
+	public ResponseEntity<?> consultarEstudiantesAprobados(@PathVariable("idCurso") Long idCurso) {
+
+		return ResponseEntity.ok(this.evaluacionService.estudiantesAprobadosCurso(idCurso));
+	}
+
+	@GetMapping("/{idCurso}/evaluacion/estudiantes-reprobados")
+	public ResponseEntity<?> consultarEstudiantesReprobados(@PathVariable("idCurso") Long idCurso) {
+
+		return ResponseEntity.ok(this.evaluacionService.estudiantesReprobadosCurso(idCurso));
 	}
 
 	@PostMapping("/{idCurso}/estudiantes")

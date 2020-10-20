@@ -1,5 +1,6 @@
 package co.edu.ucentral.app.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -90,8 +91,9 @@ public class EvaluacionServiceImpl extends CommonServiceImpl<Evaluacion, Evaluac
 
 	private EstudianteCurso validarRegistroRespuestasEstudiante(Curso curso, Long idEstudiante) {
 
-		EstudianteCurso estudianteCurso = curso.getEstudiantes().stream().filter(e -> e.getIdEstudiante().equals(idEstudiante))
-				.findAny().orElseThrow(() -> new UccCursosAppException(
+		EstudianteCurso estudianteCurso = curso.getEstudiantes().stream()
+				.filter(e -> e.getIdEstudiante().equals(idEstudiante)).findAny()
+				.orElseThrow(() -> new UccCursosAppException(
 						"No se encontro ningun estudiante en el curso con el identificador especificado"));
 
 		if (!estudianteCurso.getRespuestasExamen().isEmpty()) {
@@ -123,29 +125,44 @@ public class EvaluacionServiceImpl extends CommonServiceImpl<Evaluacion, Evaluac
 		Curso curso = this.cursoService.findById(idCurso);
 
 		EstudianteCurso estudianteCurso = this.obtenerEstudianteCurso(curso, idEstudiante);
+		ResultadosEstudiante resultado = new ResultadosEstudiante();
 
 		List<RespuestaEstudiante> respuestasEstudiante = estudianteCurso.getRespuestasExamen();
-
-		if (respuestasEstudiante.isEmpty()) {
-			throw new UccCursosAppException("El estudiante indicado aun noresponde el examen");
-		}
 
 		Map<Long, Pregunta> preguntas = curso.getExamen().getPreguntas().stream()
 				.collect(Collectors.toMap(Pregunta::getId, preg -> preg));
 
+		if (respuestasEstudiante.isEmpty()) {
+			resultado.setPresentoElExamen(false);
+			resultado.setNota(0);
+			resultado.setNoRespondidas(preguntas.size());
+			return resultado;
+		}
+
+		resultado.setPresentoElExamen(true);
+
 		int totalCorrectas = 0;
+		int totalErradas = 0;
 
 		for (RespuestaEstudiante respuesta : respuestasEstudiante) {
 			Pregunta pregunta = preguntas.get(respuesta.getOpcion().getPregunta().getId());
 
 			if (pregunta.respuestaCorrecta(respuesta.getOpcion())) {
 				totalCorrectas++;
+			} else {
+				totalErradas++;
 			}
 		}
 
 		double nota = (5.0 / (preguntas.size())) * totalCorrectas;
+		int noRespondidas = preguntas.size() - respuestasEstudiante.size();
 
-		ResultadosEstudiante resultado = new ResultadosEstudiante();
+		resultado.setNoRespondidas(noRespondidas);
+		resultado.setTotalCorrectas(totalCorrectas);
+		resultado.setTotalErradas(totalErradas);
+
+		resultado.setEstudianteCurso(estudianteCurso);
+
 		resultado.setNota(nota);
 
 		return resultado;
@@ -154,14 +171,53 @@ public class EvaluacionServiceImpl extends CommonServiceImpl<Evaluacion, Evaluac
 	@Override
 	@Transactional(readOnly = true)
 	public List<ResultadosEstudiante> obtenerTodosResultadosEstudiantes(Long idCurso) {
-		// TODO Auto-generated method stub
-		return null;
+
+		List<EstudianteCurso> estudiantes = this.cursoService.findById(idCurso).getEstudiantes();
+
+		List<ResultadosEstudiante> resultados = new ArrayList<>();
+
+		for (EstudianteCurso estudianteCurso : estudiantes) {
+			resultados.add(this.calificarExamenEstudiante(idCurso, estudianteCurso.getIdEstudiante()));
+		}
+
+		return resultados;
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Estadisticas obtenerEstadisticasCurso(Long idCurso) {
-		// TODO Auto-generated method stub
-		return null;
+
+		List<ResultadosEstudiante> resultados = this.obtenerTodosResultadosEstudiantes(idCurso);
+
+		long numeroEstudiantesAprobados = resultados.stream().filter(resultado -> resultado.getNota() >= 3.0).count();
+		long numeroEstudiantesReprobados = resultados.stream().filter(resultado -> resultado.getNota() < 3.0).count();
+		long totalEstudiantesPresentaronElExamen = resultados.stream().filter(ResultadosEstudiante::getPresentoElExamen)
+				.count();
+
+		Estadisticas estadisticas = new Estadisticas();
+
+		estadisticas.setNumeroEstudiantesAprobados(numeroEstudiantesAprobados);
+		estadisticas.setNumeroEstudiantesReprobados(numeroEstudiantesReprobados);
+		estadisticas.setTotalEstudiantesPresentaronElExamen(totalEstudiantesPresentaronElExamen);
+
+		return estadisticas;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<EstudianteCurso> estudiantesAprobadosCurso(Long idCurso) {
+
+		return this.obtenerTodosResultadosEstudiantes(idCurso).stream()
+				.filter(estudiante -> estudiante.getNota() >= 3.0).map(ResultadosEstudiante::getEstudianteCurso)
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<EstudianteCurso> estudiantesReprobadosCurso(Long idCurso) {
+
+		return this.obtenerTodosResultadosEstudiantes(idCurso).stream().filter(estudiante -> estudiante.getNota() < 3.0)
+				.map(ResultadosEstudiante::getEstudianteCurso).collect(Collectors.toList());
 	}
 
 }

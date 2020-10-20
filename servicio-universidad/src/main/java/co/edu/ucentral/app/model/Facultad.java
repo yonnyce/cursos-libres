@@ -1,5 +1,6 @@
 package co.edu.ucentral.app.model;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -19,7 +20,7 @@ public class Facultad extends EntidadBase {
 	private String nombre;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "facultad", cascade = CascadeType.ALL)
-	Set<Departamento> departamentos;
+	List<Departamento> departamentos;
 
 	public String getNombre() {
 		return nombre;
@@ -29,11 +30,11 @@ public class Facultad extends EntidadBase {
 		this.nombre = nombre;
 	}
 
-	public Set<Departamento> getDepartamentos() {
+	public List<Departamento> getDepartamentos() {
 		return departamentos;
 	}
 
-	public void setDepartamentos(Set<Departamento> departamentos) {
+	public void setDepartamentos(List<Departamento> departamentos) {
 		this.departamentos = departamentos;
 	}
 

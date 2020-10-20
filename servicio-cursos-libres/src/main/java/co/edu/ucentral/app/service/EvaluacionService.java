@@ -3,6 +3,7 @@ package co.edu.ucentral.app.service;
 import java.util.List;
 
 import co.edu.ucentral.app.model.Estadisticas;
+import co.edu.ucentral.app.model.EstudianteCurso;
 import co.edu.ucentral.app.model.Evaluacion;
 import co.edu.ucentral.app.model.Pregunta;
 import co.edu.ucentral.app.model.RespuestaEstudiante;
@@ -22,5 +23,9 @@ public interface EvaluacionService extends CommonService<Evaluacion> {
 	List<ResultadosEstudiante> obtenerTodosResultadosEstudiantes(Long idCurso);
 
 	Estadisticas obtenerEstadisticasCurso(Long idCurso);
+
+	List<EstudianteCurso> estudiantesAprobadosCurso(Long idCurso);
+
+	List<EstudianteCurso> estudiantesReprobadosCurso(Long idCurso);
 
 }
