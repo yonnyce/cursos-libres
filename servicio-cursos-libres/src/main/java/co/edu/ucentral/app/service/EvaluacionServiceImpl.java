@@ -199,6 +199,9 @@ public class EvaluacionServiceImpl extends CommonServiceImpl<Evaluacion, Evaluac
 		estadisticas.setNumeroEstudiantesAprobados(numeroEstudiantesAprobados);
 		estadisticas.setNumeroEstudiantesReprobados(numeroEstudiantesReprobados);
 		estadisticas.setTotalEstudiantesPresentaronElExamen(totalEstudiantesPresentaronElExamen);
+		double promedio = resultados.stream().collect(Collectors.summingDouble(ResultadosEstudiante::getNota))
+				/ resultados.size();
+		estadisticas.setPromedioGeneral(promedio);
 
 		return estadisticas;
 	}

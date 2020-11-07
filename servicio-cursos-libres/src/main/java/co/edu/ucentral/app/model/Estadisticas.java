@@ -5,6 +5,7 @@ public class Estadisticas {
 	long numeroEstudiantesAprobados = 0;
 	long numeroEstudiantesReprobados = 0;
 	long totalEstudiantesPresentaronElExamen = 0;
+	double promedioGeneral = 0.0;
 
 	public long getNumeroEstudiantesAprobados() {
 		return numeroEstudiantesAprobados;
@@ -28,6 +29,14 @@ public class Estadisticas {
 
 	public void setTotalEstudiantesPresentaronElExamen(long totalEstudiantesPresentaronElExamen) {
 		this.totalEstudiantesPresentaronElExamen = totalEstudiantesPresentaronElExamen;
+	}
+
+	public double getPromedioGeneral() {
+		return promedioGeneral;
+	}
+
+	public void setPromedioGeneral(double promedioGeneral) {
+		this.promedioGeneral = promedioGeneral;
 	}
 
 }
