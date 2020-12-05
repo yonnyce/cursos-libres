@@ -122,10 +122,10 @@ public class CursoController extends CommonController<Curso, CursoService> {
 	}
 
 	@GetMapping("/{idCurso}/estudiantes/{idEstudiante}/evaluacion/respuestas")
-	public ResponseEntity<?> obtenerRespuestas(@RequestBody List<RespuestaEstudiante> respuestas,
-			@PathVariable("idCurso") Long idCurso, @PathVariable("idEstudiante") Long idEstudiante) {
+	public ResponseEntity<?> obtenerRespuestas(@PathVariable("idCurso") Long idCurso,
+			@PathVariable("idEstudiante") Long idEstudiante) {
 
-		this.evaluacionService.registrarRespuestasEstudiante(idCurso, idEstudiante, respuestas);
+		this.evaluacionService.obtenerRespuestasEstudiante(idCurso, idEstudiante);
 
 		return ResponseEntity.ok().build();
 	}

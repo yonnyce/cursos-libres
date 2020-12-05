@@ -8,7 +8,7 @@
 		<version>2.3.4.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>co.edu.ucentral.app.common-usuarios</groupId>
+	<groupId>co.edu.ucentral.common-usuarios</groupId>
 	<artifactId>common-usuarios</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>common-usuarios</name>
@@ -23,11 +23,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>co.edu.ucentral.app.servicio.common</groupId>
-			<artifactId>servicio-common</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -41,4 +36,5 @@
 			</exclusions>
 		</dependency>
 	</dependencies>
+	
 </project>
