@@ -33,8 +33,10 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
 		http.authorizeRequests().antMatchers("/api/security/**").permitAll()
 		.antMatchers(HttpMethod.GET,"/api/productos/uploads/img/{id}").permitAll()
 		.antMatchers(HttpMethod.GET,"/api/facultades","/api/departamentos","/api/usuarios","/api/profesores","/api/estudiantes","/api/cursos","/api/grupos","/api/preguntas","/api/evaluaciones","/api/intentosEvaluaciones","/api/periodosAcademicos").permitAll()
+
 		.antMatchers(HttpMethod.GET,"/api/facultades/pagina","/api/departamentos/pagina","/api/usuarios/pagina","/api/profesores/pagina","/api/estudiantes/pagina","/api/cursos/pagina","/api/grupos/pagina","/api/preguntas/pagina","/api/evaluaciones/pagina","/api/intentosEvaluaciones/pagina","/api/periodosAcademicos/pagina").permitAll()
 		.antMatchers(HttpMethod.GET,"/api/facultades/{id}","/api/departamentos/{id}","/api/usuarios/{id}","/api/profesores/{id}","/api/estudiantes/{id}","/api/cursos/{id}","/api/grupos/{id}","/api/preguntas/{id}","/api/evaluaciones/{id}","/api/intentosEvaluaciones/{id}","/api/periodosAcademicos/{id}").hasAnyRole("USER","ADMIN")
+		
 		.antMatchers("/api/facultades/**","/api/departamentos/**","/api/usuarios/**","/api/profesores/**","/api/estudiantes/**","/api/cursos/**","/api/grupos/**","/api/preguntas/**","/api/evaluaciones/**","/api/intentosEvaluaciones/**","/api/periodosAcademicos/**").hasRole("ADMIN")
 		.anyRequest().authenticated()
 		.and().cors().configurationSource(corsConfigurationSource());
